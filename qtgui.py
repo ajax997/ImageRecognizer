@@ -7,7 +7,6 @@ import matplotlib.pyplot as plt
 
 from predict import Predict
 
-
 class ImageGenerator:
     def __init__(self, parent, posx, posy, *kwargs):
 

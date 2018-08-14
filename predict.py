@@ -35,4 +35,4 @@ class Predict:
         classname = img_class[0]
         plt.imshow(np.reshape(img, [28, 28]))
         plt.show()
-        print("Class: ", classname)
+        return classname
