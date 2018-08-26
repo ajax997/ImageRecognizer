@@ -37,11 +37,11 @@ class ImageGenerator:
     def save(self):
 
         print("Image Saved")
-        filename = "temp.jpg"
+        filename = "scaned.jpg"
         self.image.save(filename)
         self.image.close()
         self.image = Image.new("RGB", (400, 400), (255, 255, 255))
-        imagex = cv2.imread("temp.jpg")
+        imagex = cv2.imread("scaned.jpg")
         resized = cv2.resize(imagex, (28, 28))
         plt.imshow(resized)
         plt.show()
@@ -59,7 +59,7 @@ class ImageGenerator:
         self.drawing_area.delete("all")
         self.coords = []
         self.img2Predict = []
-        os.remove("temp.jpg")
+        os.remove("scaned.jpg")
         self.image = Image.new("RGB", (400, 400), (255, 255, 255))
         self.draw = ImageDraw.Draw(self.image)
 

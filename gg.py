@@ -15,15 +15,20 @@ print(x_test.shape)
 
 correct = 1
 
-for i in range(1, x_test.shape[0]):
-    img = x_test[i]
-    test_img = img.reshape(1, 28, 28, 1)
-    img_class = model.predict_classes(test_img)
-    classname = img_class[0]
-    if classname == y_test[i]:
-        correct += 1
-    if i % 500 == 0:
-        print(correct / i)
-        # plt.imshow(img)
-        # plt.show()
-        print(img)
+
+# for i in range(1, 50):
+#     img = x_test[i]
+#     test_img = img.reshape(1, 28, 28, 1)
+#     img_class = model.predict_classes(test_img)
+#     classname = img_class[0]
+#
+#     plt.imshow(img)
+#     plt.show()
+#     print(classname)
+#     print(test_img)
+
+for i in range(0, 300):
+    if y_test[i] == 3:
+        plt.imshow(x_test[i])
+        plt.show()
+

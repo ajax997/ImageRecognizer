@@ -24,7 +24,7 @@ class ExampleApp(tk.Tk):
         self.canvas.bind("<B1-Motion>", self.draw_from_where_you_are)
         self.canvas.bind("<Button-1>", self.drawrect)
 
-    def dw(self,size, x,y):
+    def dw(self, size, x, y):
         return self.canvas.create_rectangle(x - size, y + size, x + size, y - size, fill='red')
 
     def drawrect(self, event):
@@ -34,21 +34,21 @@ class ExampleApp(tk.Tk):
         # self.canvas.create_line(event.x + size, event.y + size, event.x + size, event.y - size, fill='red')
         # self.canvas.create_line(event.x - size, event.y - size, event.x + size, event.y - size, fill='red')
         # rect = self.canvas.create_rectangle(event.x - size, event.y + size, event.x + size, event.y - size)
-        rect = self.dw(size,event.x, event.y)
+        rect = self.dw(size, event.x, event.y)
         x, y = event.x, event.y
         while True:
 
             self.canvas.delete(rect)
-            rect = self.dw(size,x,y)
+            rect = self.dw(size, x, y)
             print("SHow")
-           
+
             if x + size > 400:
                 x = 0
                 y = y + 2 * size
             if y + size > 400:
                 break
             else:
-                x+=1
+                x += 1
 
     def clear_all(self):
         self.canvas.delete("all")

@@ -1,7 +1,8 @@
 import math
 from tkinter import *
 from tkinter.filedialog import askopenfilename
-
+import urllib.request
+import json
 import PIL
 import matplotlib.pyplot as plt
 import cv2
@@ -11,9 +12,6 @@ from skimage.transform import resize
 # create the canvas, size in pixels
 import numpy as np
 
-from predict import Predict
-
-predict = Predict()
 filename = askopenfilename(initialdir="/", title="Select file",
                            filetypes=(("jpeg files", "*.jpg"), ("png file", "*.png")))
 
@@ -42,6 +40,19 @@ print(type(image))
 
 sizeof = 3
 
+def sentAPI(data):
+    body = {'data': data}
+
+    myurl = "http://127.0.0.1:5000/request"
+    req = urllib.request.Request(myurl)
+    req.add_header('Content-Type', 'application/json; charset=utf-8')
+    jsondata = json.dumps(body)
+    jsondataasbytes = jsondata.encode('utf-8')  # needs to be bytes
+    req.add_header('Content-Length', len(jsondataasbytes))
+    response = urllib.request.urlopen(req, jsondataasbytes)
+    return str(response.read())
+
+
 
 def image_pre_processing(img):
     img2Predict = []
@@ -60,16 +71,22 @@ def image_pre_processing(img):
                     count += 1
                 except:
                     pass
-    newImg = imresize(newImg, [28, 28], 'nearest')
-    plt.imshow(newImg)
-    plt.show()
+    newImg = imresize(newImg, [20, 20], )
+    imgFull = np.full((28, 28, 3), [255, 255, 255], dtype=int)
+    imgFull[5:25, 5:25] = newImg
+
+    imgFull = (255-imgFull)
+
+    newImg = imgFull
+    # plt.imshow(newImg)
+    # plt.show()
 
     for i in range(0, 28):
         for j in range(0, 28):
-            if newImg[i, j][0] == 255 and newImg[i, j][1] == 255 and newImg[i, j][2] == 255:
+            if newImg[i, j][0] == 0 and newImg[i, j][1] == 0 and newImg[i, j][2] == 0:
                 img2Predict.append(0)
             else:
-                img2Predict.append(int(np.mean(np.invert(newImg[i, j]))))
+                img2Predict.append(int(np.mean(newImg[i, j]))+100)
     return img2Predict
 
 
@@ -121,11 +138,12 @@ def trace(x1, y1, x2, y2):
     crop_img = image[x1:x2, y1:y2]
     toPredict = image_pre_processing(crop_img)
 
-    num = predict.predict(np.reshape(toPredict, [1, 28, 28, 1]))
-    print(toPredict)
+    num = sentAPI(toPredict)
+    #
+    # print(toPredict)
 
     canvas.create_text(y1, x1, fill="darkblue", font="Times 20 italic bold",
-                       text=str(num))
+                       text=str(num[2]))
 
     # reset area that already crop
 
@@ -158,7 +176,7 @@ def check_inside(x, y):
 while True:
     res = check_inside(x, y)
     if res[0]:
-        print(res[1], res[2])
+        # print(res[1], res[2])
         canvas.create_rectangle(res[2] - sizeof, res[1] - sizeof, res[2] + sizeof, res[1] + sizeof)
         canvas.create_line(res[1], res[2], res[1] + 1, res[2] + 1, fill='red')
         trace(res[1] - sizeof, res[2] - sizeof, res[1] + sizeof, res[2] + sizeof)
