@@ -34,15 +34,19 @@ previousLine = 0
 
 def boxer(_previousLine, currentLine, _H, _image):
     startVertical = True
+    previousVertical = 0
     for _i in range(0, _H):
         verticalLine = _image[_previousLine:currentLine, _i:_i + 1]
         cilV = checkInline2(verticalLine, currentLine - _previousLine)
         if cilV and startVertical:
-            cv2.line(image, (_i, _previousLine), (_i, currentLine), (30, 255, 50), 1)
+            previousVertical = _i
+            # cv2.line(image, (_i, _previousLine), (_i, currentLine), (30, 255, 50), 1)
             startVertical = False
         if not cilV and not startVertical:
-            cv2.line(image, (_i, _previousLine), (_i, currentLine), (30, 255, 50), 1)
+            # cv2.line(image, (_i, _previousLine), (_i, currentLine), (30, 255, 50), 1)
             startVertical = True
+            cv2.rectangle(_image, (previousVertical, _previousLine), (_i, currentLine), (30, 255, 50))
+            previousVertical = _i
 
 
 for i in range(0, W):
