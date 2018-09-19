@@ -5,8 +5,7 @@ from scipy.misc import imresize
 
 
 def isblackPx(c1):
-    return c1[0] != 255 and c1[1] != 255 and c1[2] != 255
-    # return c1[0] + c1[1] + c1[2] < 200
+    return c1 != 255
 
 
 def checkInline(_line, _H, epsilon):
@@ -24,9 +23,34 @@ def checkInline2(_line, _H):
     return False
 
 
-image = cv2.imread('images/MultiColors.png')
+image = cv2.imread('images/excel.png')
+image = cv2.fastNlMeansDenoisingColored(image, None, 10, 10, 7, 21)
+
+original = image
+
+edges = cv2.Canny(image, 50, 150, apertureSize=5, L2gradient=True)
+image = 255 - edges
+# cv2.imshow('w', image)
+# lines = cv2.HoughLines(edges, 1, np.pi / 180, 200)
+#
+# if lines is not None:
+#     for i in range(len(lines)):
+#         for rho, theta in lines[i]:
+#             a = np.cos(theta)
+#             b = np.sin(theta)
+#             x0 = a * rho
+#             y0 = b * rho
+#
+#             pts1 = (int(x0 + 100 * -b), int(y0 + 1000 * a))
+#             pts2 = (int(x0 - 100 * -b), int(y0 - 1000 * a))
+#             cv2.line(image, pts1, pts2, (0, 255, 0), 2)
+
+
+ret, image = cv2.threshold(image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+cv2.imwrite("dd_gray.png", image)
 W, H = image.shape[:2]
 image = imresize(image, 800 / max(W, H))
+original = imresize(original, 800 / max(W, H))
 W, H = image.shape[:2]
 print(W, H)
 wnName = "Image"
@@ -34,6 +58,17 @@ cv2.namedWindow(wnName)
 
 startLine = True
 previousLine = 0
+
+
+def box_content(box):
+    count = 0
+    r, c = box.shape[0:2]
+    for _i in range(0, r):
+        for j in range(0, c):
+
+            if box[_i, j] != 255:
+                count += 1
+    return count / (r * c) > 0.5
 
 
 def boxer(_previousLine, currentLine, _H, _image):
@@ -44,25 +79,22 @@ def boxer(_previousLine, currentLine, _H, _image):
         cilV = checkInline2(verticalLine, currentLine - _previousLine)
         if cilV and startVertical:
             previousVertical = _i
-            # cv2.line(image, (_i, _previousLine), (_i, currentLine), (30, 255, 50), 1)
             startVertical = False
         if not cilV and not startVertical:
-            # cv2.line(image, (_i, _previousLine), (_i, currentLine), (30, 255, 50), 1)
             startVertical = True
-            cv2.rectangle(_image, (previousVertical, _previousLine), (_i, currentLine), (30, 255, 50))
-            previousVertical = _i
+            if box_content(_image[previousLine:currentLine, previousVertical: _i]):
+                cv2.rectangle(_image, (previousVertical, _previousLine), (_i, currentLine), (30, 255, 50))
+                previousVertical = _i
 
 
 for i in range(0, W):
     line = image[i, :]
     cilR = checkInline(line, H, 0.08)
     if cilR and startLine:
-        # cv2.line(image, (0, i), (H, i), (0, 255, 0), 1)
         previousLine = i
         startLine = False
 
     if not cilR and not startLine:
-        # cv2.line(image, (0, i), (H, i), (100, 255, 50), 1)
         startLine = True
         if i - previousLine > 5:
             boxer(previousLine, i, H, image)

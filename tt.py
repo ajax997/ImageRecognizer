@@ -1,15 +1,20 @@
-from pynput.mouse import Button, Controller
+import cv2
+import numpy as np
 
-mouse = Controller()
+def detect_background(_image):
+    colorList = {
+    }
+    W, H = _image.shape[:2]
+    for _i in range(0, W):
+        for _j in range(0, H):
+            pixel = _image[_i, _j]
+            if pixel in colorList:
+                colorList[pixel] = colorList[pixel] + 1
+            else:
+                colorList[pixel] = 1
+    return colorList
 
-# Read pointer position
-print('The current pointer position is {0}'.format(
-    mouse.position))
 
-# Set pointer position
-mouse.position = (10, 20)
-print('Now we have moved it to {0}'.format(
-    mouse.position))
-
-# Move pointer relative to current position
-mouse.move(5, -5)
+image = cv2.imread('images/preprocessed.png')
+image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+print(max(detect_background(image)))

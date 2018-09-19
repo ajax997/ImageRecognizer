@@ -1,16 +1,12 @@
-import math
+import json
+import urllib.request
 from tkinter import *
 from tkinter.filedialog import askopenfilename
-import urllib.request
-import json
-import PIL
-import matplotlib.pyplot as plt
-import cv2
-from scipy.misc import imresize
-from skimage.transform import resize
 
+import cv2
 # create the canvas, size in pixels
 import numpy as np
+from scipy.misc import imresize
 
 filename = askopenfilename(initialdir="/", title="Select file",
                            filetypes=(("jpeg files", "*.jpg"), ("png file", "*.png")))
@@ -40,6 +36,7 @@ print(type(image))
 
 sizeof = 3
 
+
 def sentAPI(data):
     body = {'data': data}
 
@@ -51,7 +48,6 @@ def sentAPI(data):
     req.add_header('Content-Length', len(jsondataasbytes))
     response = urllib.request.urlopen(req, jsondataasbytes)
     return str(response.read())
-
 
 
 def image_pre_processing(img):
@@ -75,7 +71,7 @@ def image_pre_processing(img):
     imgFull = np.full((28, 28, 3), [255, 255, 255], dtype=int)
     imgFull[5:25, 5:25] = newImg
 
-    imgFull = (255-imgFull)
+    imgFull = (255 - imgFull)
 
     newImg = imgFull
     # plt.imshow(newImg)
@@ -86,7 +82,7 @@ def image_pre_processing(img):
             if newImg[i, j][0] == 0 and newImg[i, j][1] == 0 and newImg[i, j][2] == 0:
                 img2Predict.append(0)
             else:
-                img2Predict.append(int(np.mean(newImg[i, j]))+100)
+                img2Predict.append(int(np.mean(newImg[i, j])) + 100)
     return img2Predict
 
 

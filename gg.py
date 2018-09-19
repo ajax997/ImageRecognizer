@@ -28,7 +28,7 @@ correct = 1
 #     print(test_img)
 
 for i in range(0, 300):
-    if y_test[i] == 3:
+    if y_test[i] == 1:
         plt.imshow(x_test[i])
         plt.show()
 
