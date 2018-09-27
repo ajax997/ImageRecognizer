@@ -74,7 +74,7 @@ def image_pre_processing(img):
     imgFull = (255 - imgFull)
 
     newImg = imgFull
-    # plt.imshow(newImg)
+    # plt.imshow(newImg)zx
     # plt.show()
 
     for i in range(0, 28):
