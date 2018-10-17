@@ -28,11 +28,16 @@ def image_pre_processing(img):
 
 
 def boxer(_previousLine, currentLine, _H, _image, _original):
+
+    plt.imshow(_original[_previousLine: currentLine, :])
+    plt.show()
+
     _original = cv2.cvtColor(_original, cv2.COLOR_BGR2GRAY)
     startVertical = True
     previousVertical = 0
     for _i in range(0, _H):
         verticalLine = _image[_previousLine:currentLine, _i:_i + 1]
+
         cilV = checkInline2(verticalLine, currentLine - _previousLine, 0.0)
         if cilV and startVertical:
             previousVertical = _i
@@ -42,7 +47,7 @@ def boxer(_previousLine, currentLine, _H, _image, _original):
             # cv2.line(_original, (_i, _previousLine), (_i, currentLine), (30, 255, 50), 1)
             startVertical = True
             # cv2.rectangle(_original, (previousVertical, _previousLine), (_i, currentLine), (30, 255, 50))
-            img = 255-image_pre_processing(_original[_previousLine: currentLine, previousVertical:_i])
+            img = 255 - image_pre_processing(_original[_previousLine: currentLine, previousVertical:_i])
             print(img)
             _str = base64.b64encode(img)
             base64_2_numpy(_str, img.shape)
@@ -84,7 +89,7 @@ def checkInline2(_line, _H, epsilon):
 
 
 def main():
-    image = cv2.imread('images/vn.png')
+    image = cv2.imread('images/polistic.png')
     original = image
     image = cv2.fastNlMeansDenoisingColored(image, None, 10, 10, 7, 21)
 
@@ -109,7 +114,7 @@ def main():
 
     for i in range(0, W):
         line = image[i, :]
-        cilR = checkInline(line, H, 0.01)
+        cilR = checkInline(line, H, 0.015)
         # if not cilR:
         #     cv2.line(original, (0, i), (H, i), (0, 255, 0), 1)
 

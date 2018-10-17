@@ -11,6 +11,7 @@
       <w>imread</w>
       <w>imshow</w>
       <w>isblack</w>
+      <w>kmeans</w>
       <w>relu</w>
       <w>softmax</w>
     </words>

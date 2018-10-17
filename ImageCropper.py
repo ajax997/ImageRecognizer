@@ -83,7 +83,7 @@ class ImageCropper:
 
         crop_img = self.image[x1 - 5:x2 + 5, y1 - 5:y2 + 5]
 
-        # reset area that already crop
+        # reset area that already cropped
         pp = self.image_pre_processing(crop_img)
         for i in range(x1, x2):
             for j in range(y1, y2):
