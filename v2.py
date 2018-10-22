@@ -9,7 +9,7 @@ img = cv2.imread('images/newrotation.png', 0)
 ori = img
 img = 255 - cv2.Canny(img, 50, 150, apertureSize=5, L2gradient=True)
 W, H = img.shape[:2]
-
+img = imresize(img, 600 / max(W, H))
 kernel = np.ones((15, 15), np.uint8)
 erosion = cv2.erode(img, kernel, iterations=1)
 erosion = imresize(erosion, 600 / max(W, H))

@@ -8,10 +8,13 @@
       <w>darkblue</w>
       <w>drawisland</w>
       <w>drawrect</w>
+      <w>erosioned</w>
       <w>imread</w>
       <w>imshow</w>
       <w>isblack</w>
       <w>kmeans</w>
+      <w>newrotation</w>
+      <w>polistic</w>
       <w>relu</w>
       <w>softmax</w>
     </words>
