@@ -6,6 +6,7 @@
       <w>classname</w>
       <w>crossentropy</w>
       <w>darkblue</w>
+      <w>denoising</w>
       <w>drawisland</w>
       <w>drawrect</w>
       <w>erosioned</w>
@@ -16,6 +17,7 @@
       <w>newrotation</w>
       <w>polistic</w>
       <w>relu</w>
+      <w>scaler</w>
       <w>softmax</w>
     </words>
   </dictionary>

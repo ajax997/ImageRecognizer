@@ -13,7 +13,6 @@ def tract(img, sx, sy):
 
     while equal(img[x_las, y_las], img[sx, sy]):
 
-
         if equal(img[x_las + 1, y_las], img[sx, sy]):
             x_las += 1
             continue
@@ -55,5 +54,3 @@ for i in range(c):
 
 # cv2.imshow("image", image)
 # cv2.waitKey(0)
-
-
